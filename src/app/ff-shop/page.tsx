@@ -432,7 +432,7 @@ export default function FFShop() {
                   Your order will be shipped to the L&apos;Oréal Indonesia office within 2-3 business days.
                   A confirmation has been sent to sarah.chen@loreal.com.
                 </p>
-                <p className="text-xs text-gray-400">Order ID: FFO-{String(Math.floor(Math.random() * 900 + 100))}</p>
+                <p className="text-xs text-gray-400">Order ID: FFO-482</p>
               </div>
             )}
           </div>

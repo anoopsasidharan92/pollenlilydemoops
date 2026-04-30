@@ -92,9 +92,14 @@ export default function AuctionWorkflow({ onBack }: Props) {
     }, delay);
   };
 
+  const initRef = useRef(false);
   useEffect(() => {
-    addLilyMessage(LILY_AUCTION_MESSAGES.welcome, 600);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (initRef.current) return;
+    initRef.current = true;
+    const t = setTimeout(() => {
+      setLilyMessages([{ role: "lily", content: LILY_AUCTION_MESSAGES.welcome }]);
+    }, 600);
+    return () => clearTimeout(t);
   }, []);
 
   const goToStep = (step: number) => {

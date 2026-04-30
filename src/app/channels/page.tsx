@@ -6,7 +6,7 @@ import LilyChat from "@/components/LilyChat";
 import AuctionDashboard from "@/components/auctions/AuctionDashboard";
 import CatalogDashboard from "@/components/catalog/CatalogDashboard";
 import FFChannelDashboard from "@/components/ff/FFChannelDashboard";
-import { listings, automations } from "@/lib/demo-data";
+import { listings } from "@/lib/demo-data";
 import {
   Search,
   Filter,
@@ -25,7 +25,6 @@ import {
   Eye,
   MoreHorizontal,
   Activity,
-  Zap,
 } from "lucide-react";
 
 const channelTabs = [

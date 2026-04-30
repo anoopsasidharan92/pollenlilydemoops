@@ -6,7 +6,6 @@ import {
   Sparkles,
   Send,
   CheckCircle2,
-  ChevronRight,
   RotateCcw,
   Settings,
   DollarSign,
@@ -130,13 +129,7 @@ export default function AuctionAISetup({ onBack, onComplete }: Props) {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  useEffect(() => {
-    if (initRef.current) return;
-    initRef.current = true;
-    addLilyMessage("intro");
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  function addLilyMessage(key: string) {
+  const addLilyMessage = (key: string) => {
     setIsTyping(true);
     const delay = key === "intro" ? 800 : 1200;
     setTimeout(() => {
@@ -154,7 +147,13 @@ export default function AuctionAISetup({ onBack, onComplete }: Props) {
       ]);
       setIsTyping(false);
     }, delay);
-  }
+  };
+
+  useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
+    addLilyMessage("intro");
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleUserInput(text: string) {
     if (!text.trim()) return;

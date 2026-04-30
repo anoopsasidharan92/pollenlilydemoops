@@ -9,7 +9,6 @@ import {
   Filter,
   CheckCircle2,
   ArrowRight,
-  ChevronDown,
   Sparkles,
   Package,
   Tag,

@@ -15,7 +15,6 @@ import {
   CheckCircle2,
   Package,
   Truck,
-  ArrowRight,
 } from "lucide-react";
 import type { Customer } from "@/lib/demo-data";
 
