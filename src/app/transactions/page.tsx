@@ -48,6 +48,10 @@ const ffStatusConfig: Record<string, { color: string; bg: string }> = {
 };
 
 export default function Transactions() {
+  const USD_TO_THB = 36;
+  const formatTHB = (value: number) =>
+    `THB ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value * USD_TO_THB)}`;
+
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [statusFilter, setStatusFilter] = useState<TxnStatus>("All");
   const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(null);
@@ -197,8 +201,8 @@ export default function Transactions() {
                           <td className="px-3 py-2.5 text-xs font-medium text-text-primary">{txn.buyer}</td>
                           <td className="px-3 py-2.5 text-xs text-text-secondary max-w-[180px] truncate">{txn.product}</td>
                           <td className="px-3 py-2.5 text-xs font-medium">{txn.quantity.toLocaleString()}</td>
-                          <td className="px-3 py-2.5 text-xs font-medium">${txn.offerPrice.toFixed(2)}</td>
-                          <td className="px-3 py-2.5 text-xs font-medium">${txn.psiPrice.toFixed(2)}</td>
+                          <td className="px-3 py-2.5 text-xs font-medium">{formatTHB(txn.offerPrice)}</td>
+                          <td className="px-3 py-2.5 text-xs font-medium">{formatTHB(txn.psiPrice)}</td>
                           <td className="px-3 py-2.5">
                             <span className={`text-xs font-medium ${Number(gap) > 15 ? "text-accent-red" : Number(gap) > 5 ? "text-accent-orange" : "text-accent-green"}`}>
                               {Number(gap) > 0 ? `-${gap}%` : "Match"}
@@ -264,7 +268,7 @@ export default function Transactions() {
                 { label: "Total F&F Orders", value: ffOrders.length, color: "text-primary", bg: "bg-primary-lighter" },
                 { label: "Online Orders", value: ffOnlineOrders, color: "text-accent-blue", bg: "bg-blue-50", icon: Monitor },
                 { label: "Bazaar Orders", value: ffBazaarOrders, color: "text-accent-orange", bg: "bg-orange-50", icon: MapPin },
-                { label: "Total Revenue", value: `$${ffTotalRevenue.toFixed(0)}`, color: "text-accent-green", bg: "bg-green-50" },
+                { label: "Total Revenue", value: `THB ${Math.round(ffTotalRevenue * USD_TO_THB).toLocaleString()}`, color: "text-accent-green", bg: "bg-green-50" },
               ].map((stat) => (
                 <div key={stat.label} className="bg-white rounded-xl border border-border p-4">
                   <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
@@ -311,7 +315,7 @@ export default function Transactions() {
                       <p className="text-[10px] text-text-secondary truncate">{evt.product} × {evt.qty}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-xs font-bold text-text-primary">${evt.amount.toFixed(2)}</p>
+                      <p className="text-xs font-bold text-text-primary">{formatTHB(evt.amount)}</p>
                       <p className="text-[10px] text-text-muted">{evt.time}</p>
                     </div>
                     <span className={`text-[9px] px-2 py-0.5 rounded-full font-medium shrink-0 ${
@@ -382,7 +386,7 @@ export default function Transactions() {
                           <td className="px-3 py-2.5 text-xs text-text-secondary">{order.department}</td>
                           <td className="px-3 py-2.5 text-xs text-text-secondary max-w-[160px] truncate">{order.product}</td>
                           <td className="px-3 py-2.5 text-xs font-medium">{order.quantity}</td>
-                          <td className="px-3 py-2.5 text-xs font-medium">${order.totalAmount.toFixed(2)}</td>
+                          <td className="px-3 py-2.5 text-xs font-medium">{formatTHB(order.totalAmount)}</td>
                           <td className="px-3 py-2.5">
                             <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1 w-fit ${
                               order.channel === "Online" ? "bg-blue-50 text-accent-blue" : "bg-orange-50 text-accent-orange"
@@ -430,11 +434,11 @@ export default function Transactions() {
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-text-muted">Buyer Offer</span>
-                  <span className="font-medium text-accent-red">${selectedTxn.offerPrice.toFixed(2)}/unit</span>
+                  <span className="font-medium text-accent-red">{formatTHB(selectedTxn.offerPrice)}/unit</span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-text-muted">PSI Price</span>
-                  <span className="font-medium">${selectedTxn.psiPrice.toFixed(2)}/unit</span>
+                  <span className="font-medium">{formatTHB(selectedTxn.psiPrice)}/unit</span>
                 </div>
               </div>
 
@@ -448,7 +452,7 @@ export default function Transactions() {
               <div>
                 <label className="text-xs text-text-secondary mb-1 block">Counter Price (per unit)</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-text-muted">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-text-muted">THB</span>
                   <input
                     value={counterPrice}
                     onChange={(e) => setCounterPrice(e.target.value)}
@@ -497,11 +501,11 @@ export default function Transactions() {
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-text-muted">Agreed Price</span>
-                  <span className="font-medium text-accent-green">${selectedTxn.offerPrice.toFixed(2)}/unit</span>
+                  <span className="font-medium text-accent-green">{formatTHB(selectedTxn.offerPrice)}/unit</span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-text-muted">Total Value</span>
-                  <span className="font-bold">${(selectedTxn.offerPrice * selectedTxn.quantity).toLocaleString()}</span>
+                  <span className="font-bold">{formatTHB(selectedTxn.offerPrice * selectedTxn.quantity)}</span>
                 </div>
               </div>
 

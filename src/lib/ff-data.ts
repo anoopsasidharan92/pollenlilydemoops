@@ -76,7 +76,7 @@ export const ffListings: FFListing[] = [
 ];
 
 export const ffOrders: FFOrder[] = [
-  { id: "FFO-001", buyer: "Sarah Chen", buyerEmail: "sarah.chen@loreal.com", department: "Marketing", product: "L'Oréal Paris Revitalift Hyaluronic Acid Serum 30ml", sku: "LOR-SER-002", quantity: 2, unitPrice: 9.96, totalAmount: 19.92, channel: "Online", status: "Shipped", date: "2026-04-28", time: "09:15" },
+  { id: "FFO-001", buyer: "Duan Prasert", buyerEmail: "duan.prasert@loreal.com", department: "Marketing", product: "L'Oréal Paris Revitalift Hyaluronic Acid Serum 30ml", sku: "LOR-SER-002", quantity: 2, unitPrice: 9.96, totalAmount: 19.92, channel: "Online", status: "Shipped", date: "2026-04-28", time: "09:15" },
   { id: "FFO-002", buyer: "David Lim", buyerEmail: "david.lim@loreal.com", department: "R&D", product: "NYX Professional Makeup Soft Matte Lip Cream", sku: "NYX-LIP-007", quantity: 4, unitPrice: 5.95, totalAmount: 23.80, channel: "Bazaar", status: "Picked Up", date: "2026-04-28", time: "11:32", posTerminal: "POS-B02" },
   { id: "FFO-003", buyer: "Aisha Rahman", buyerEmail: "aisha.rahman@loreal.com", department: "Finance", product: "Garnier Bright Complete Vitamin C Serum Mask", sku: "GAR-MSK-003", quantity: 6, unitPrice: 2.45, totalAmount: 14.70, channel: "Online", status: "Processing", date: "2026-04-29", time: "08:42" },
   { id: "FFO-004", buyer: "James Park", buyerEmail: "james.park@loreal.com", department: "Supply Chain", product: "Garnier Bright Complete UV Protection SPF50", sku: "GAR-SUN-012", quantity: 2, unitPrice: 6.36, totalAmount: 12.72, channel: "Bazaar", status: "Picked Up", date: "2026-04-28", time: "14:20", posTerminal: "POS-B01" },
@@ -101,7 +101,7 @@ export const ffAccessConfig: FFAccessConfig = {
   eventStartDate: "2026-04-25",
   eventEndDate: "2026-05-02",
   bazaarEnabled: true,
-  bazaarLocation: "L'Oréal Indonesia HQ — Lobby Level, Hall B",
+  bazaarLocation: "L'Oréal Thailand HQ — Lobby Level, Hall B",
   bazaarDates: ["2026-04-28", "2026-04-29"],
 };
 

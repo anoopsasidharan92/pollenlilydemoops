@@ -15,6 +15,8 @@ import {
   Package,
   Shield,
   Clock,
+  CreditCard,
+  Smartphone,
 } from "lucide-react";
 import { ffListings } from "@/lib/ff-data";
 
@@ -29,12 +31,17 @@ interface CartItem {
 }
 
 export default function FFShop() {
+  const USD_TO_THB = 36;
+  const formatTHB = (value: number) =>
+    `THB ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value * USD_TO_THB)}`;
+
   const [cart, setCart] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [checkoutPayMethod, setCheckoutPayMethod] = useState<"card" | "apple" | "paypal">("card");
 
   const categories = ["All", ...Array.from(new Set(ffListings.map((l) => l.category)))];
 
@@ -121,7 +128,7 @@ export default function FFShop() {
             </div>
             <div className="flex items-center gap-2 text-xs text-gray-600">
               <User size={14} />
-              <span className="font-medium">Sarah Chen</span>
+              <span className="font-medium">Duan Prasert</span>
             </div>
             <button
               onClick={() => setShowCart(true)}
@@ -152,7 +159,7 @@ export default function FFShop() {
           </p>
           <div className="flex items-center gap-4 mt-4">
             <div className="bg-white/10 backdrop-blur rounded-lg px-4 py-2">
-              <p className="text-lg font-bold">${remainingBudget.toFixed(2)}</p>
+              <p className="text-lg font-bold">{formatTHB(remainingBudget)}</p>
               <p className="text-[10px] text-purple-200">Budget Remaining</p>
             </div>
             <div className="bg-white/10 backdrop-blur rounded-lg px-4 py-2">
@@ -231,8 +238,8 @@ export default function FFShop() {
                   <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wide">{item.brand}</p>
                   <p className="text-xs font-medium text-gray-900 line-clamp-2 leading-relaxed">{item.product}</p>
                   <div className="flex items-center gap-2">
-                    <span className="text-base font-bold text-[#6B3FA0]">${item.ffPrice.toFixed(2)}</span>
-                    <span className="text-xs text-gray-400 line-through">${item.retailPrice.toFixed(2)}</span>
+                    <span className="text-base font-bold text-[#6B3FA0]">{formatTHB(item.ffPrice)}</span>
+                    <span className="text-xs text-gray-400 line-through">{formatTHB(item.retailPrice)}</span>
                   </div>
                   <div className="flex items-center justify-between text-[10px] text-gray-400">
                     <span>Max {item.maxPerBuyer} per person</span>
@@ -318,7 +325,7 @@ export default function FFShop() {
                     <div className="flex-1 min-w-0">
                       <p className="text-[10px] text-gray-500 font-medium">{item.brand}</p>
                       <p className="text-xs font-medium text-gray-900 truncate">{item.product}</p>
-                      <p className="text-sm font-bold text-[#6B3FA0] mt-1">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-sm font-bold text-[#6B3FA0] mt-1">{formatTHB(item.price * item.quantity)}</p>
                     </div>
                     <div className="flex flex-col items-center gap-1">
                       <button
@@ -345,18 +352,18 @@ export default function FFShop() {
               <div className="p-5 border-t border-gray-200 space-y-3">
                 <div className="flex justify-between text-xs text-gray-500">
                   <span>Subtotal</span>
-                  <span className="font-medium text-gray-900">${cartTotal.toFixed(2)}</span>
+                  <span className="font-medium text-gray-900">{formatTHB(cartTotal)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-gray-500">Spending Cap Remaining</span>
                   <span className={`font-medium ${remainingBudget < 0 ? "text-red-500" : "text-green-600"}`}>
-                    ${remainingBudget.toFixed(2)}
+                    {formatTHB(remainingBudget)}
                   </span>
                 </div>
                 {remainingBudget < 0 && (
                   <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg p-2">
                     <Lock size={12} className="text-red-500" />
-                    <p className="text-[10px] text-red-600">You have exceeded your spending cap of $200.</p>
+                    <p className="text-[10px] text-red-600">You have exceeded your spending cap of THB 7,200.</p>
                   </div>
                 )}
                 <button
@@ -364,7 +371,7 @@ export default function FFShop() {
                   disabled={remainingBudget < 0 || cart.length === 0}
                   className="w-full bg-[#6B3FA0] text-white py-3 rounded-lg text-sm font-medium hover:bg-[#4A2B73] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Checkout · ${cartTotal.toFixed(2)}
+                  Checkout · {formatTHB(cartTotal)}
                 </button>
               </div>
             )}
@@ -385,7 +392,7 @@ export default function FFShop() {
                   <div className="bg-gray-50 rounded-lg p-3 space-y-2">
                     <div className="flex justify-between text-xs">
                       <span className="text-gray-500">Employee</span>
-                      <span className="font-medium">Sarah Chen (sarah.chen@loreal.com)</span>
+                      <span className="font-medium">Duan Prasert (duan.prasert@loreal.com)</span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-gray-500">Department</span>
@@ -397,13 +404,86 @@ export default function FFShop() {
                     </div>
                     <div className="flex justify-between text-xs border-t border-gray-200 pt-2">
                       <span className="text-gray-500">Total</span>
-                      <span className="font-bold text-[#6B3FA0]">${cartTotal.toFixed(2)}</span>
+                      <span className="font-bold text-[#6B3FA0]">{formatTHB(cartTotal)}</span>
                     </div>
                   </div>
 
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-green-600" />
-                    <p className="text-xs text-green-700">Payment will be deducted from your next payroll</p>
+                  <div className="space-y-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">Payment</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {(
+                        [
+                          { id: "card" as const, label: "Card", icon: CreditCard },
+                          { id: "apple" as const, label: "Wallet", icon: Smartphone },
+                          { id: "paypal" as const, label: "PayPal", icon: null },
+                        ] as const
+                      ).map((opt) => (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => setCheckoutPayMethod(opt.id)}
+                          className={`rounded-lg border px-2 py-2 text-center transition-colors ${
+                            checkoutPayMethod === opt.id
+                              ? "border-[#6B3FA0] bg-[#6B3FA0]/5 ring-1 ring-[#6B3FA0]/20"
+                              : "border-gray-200 bg-white hover:border-gray-300"
+                          }`}
+                        >
+                          {opt.icon ? (
+                            <>
+                              <opt.icon
+                                size={16}
+                                className={`mx-auto mb-1 ${checkoutPayMethod === opt.id ? "text-[#6B3FA0]" : "text-gray-400"}`}
+                              />
+                              <span className="text-[10px] font-medium text-gray-700">{opt.label}</span>
+                            </>
+                          ) : (
+                            <span className="text-[11px] font-bold text-[#003087] leading-tight py-1 block">PayPal</span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+
+                    {checkoutPayMethod === "card" && (
+                      <div className="rounded-lg border border-gray-200 bg-gray-50/80 p-3 space-y-2">
+                        <div>
+                          <label className="text-[10px] text-gray-500 block mb-1">Card number</label>
+                          <div className="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-mono text-gray-600">
+                            <CreditCard size={14} className="text-gray-400 shrink-0" />
+                            <span>4242 ······ ······ 4242</span>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] text-gray-500 block mb-1">Expires</label>
+                            <div className="rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-mono text-gray-500">12 / 28</div>
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-gray-500 block mb-1">CVC</label>
+                            <div className="rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-mono text-gray-400">···</div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {checkoutPayMethod === "apple" && (
+                      <div className="rounded-lg border border-gray-200 bg-black text-white px-4 py-3 flex items-center justify-center gap-2">
+                        <Smartphone size={18} className="opacity-90" />
+                        <span className="text-sm font-medium">Pay with Wallet</span>
+                      </div>
+                    )}
+
+                    {checkoutPayMethod === "paypal" && (
+                      <div className="rounded-lg border border-[#0070BA]/30 bg-[#F7FAFC] px-4 py-3 flex items-center justify-center gap-2">
+                        <span className="text-sm font-semibold text-[#003087]">Continue with PayPal</span>
+                      </div>
+                    )}
+
+                    <div className="flex items-start gap-2 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2">
+                      <Shield size={14} className="text-gray-400 shrink-0 mt-0.5" />
+                      <p className="text-[10px] text-gray-500 leading-snug">
+                        Prototype checkout — card and wallet UIs are illustrative only; no payment is processed.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="flex gap-2">
@@ -429,8 +509,8 @@ export default function FFShop() {
                 </div>
                 <h3 className="text-lg font-bold text-gray-900">Order Placed!</h3>
                 <p className="text-sm text-gray-500">
-                  Your order will be shipped to the L&apos;Oréal Indonesia office within 2-3 business days.
-                  A confirmation has been sent to sarah.chen@loreal.com.
+                  Your order will be shipped to the L&apos;Oréal Thailand office within 2-3 business days.
+                  A confirmation has been sent to duan.prasert@loreal.com.
                 </p>
                 <p className="text-xs text-gray-400">Order ID: FFO-482</p>
               </div>
