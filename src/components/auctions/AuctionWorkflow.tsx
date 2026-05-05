@@ -53,12 +53,13 @@ export default function AuctionWorkflow({ onBack }: Props) {
   // Auction parameters state
   const [auctionType, setAuctionType] = useState<"English" | "Dutch" | "Sealed Bid">("English");
   const [buyerAccess, setBuyerAccess] = useState<"Invite Only" | "Approved Marketplace" | "Private List">("Approved Marketplace");
-  const [startDate, setStartDate] = useState("2026-05-05");
+  const [startDate, setStartDate] = useState("2026-05-12");
   const [startTime, setStartTime] = useState("08:00");
-  const [endDate, setEndDate] = useState("2026-05-06");
+  const [endDate, setEndDate] = useState("2026-05-13");
   const [endTime, setEndTime] = useState("18:00");
-  const [eventTitle, setEventTitle] = useState("L'Oréal Indonesia Q2 Clearance Auction");
-  const [brandColor, setBrandColor] = useState("#6B3FA0");
+  const [eventTitle, setEventTitle] = useState("Weekly P1 Clearance Auction");
+  const [brandColor, setBrandColor] = useState("#2563EB");
+  const [brandName, setBrandName] = useState("Pollen Direct");
 
   // Bundle state
   const [selectedBundles, setSelectedBundles] = useState<string[]>(
@@ -183,8 +184,8 @@ export default function AuctionWorkflow({ onBack }: Props) {
         <div className="flex items-center gap-2">
           <span className="text-xs text-text-muted">Seller:</span>
           <div className="flex items-center gap-1.5 bg-primary-lighter/50 px-2.5 py-1 rounded-lg">
-            <div className="w-5 h-5 rounded bg-primary flex items-center justify-center text-white text-[9px] font-bold">L</div>
-            <span className="text-xs font-medium text-primary">L&apos;Oréal Indonesia</span>
+            <div className="w-5 h-5 rounded bg-primary flex items-center justify-center text-white text-[9px] font-bold">P</div>
+            <span className="text-xs font-medium text-primary">{brandName}</span>
           </div>
         </div>
       </div>
@@ -343,6 +344,15 @@ export default function AuctionWorkflow({ onBack }: Props) {
                   <input
                     value={eventTitle}
                     onChange={(e) => setEventTitle(e.target.value)}
+                    className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-primary/40"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[11px] text-text-secondary font-medium block mb-1.5">Brand Name</label>
+                  <input
+                    value={brandName}
+                    onChange={(e) => setBrandName(e.target.value)}
                     className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-primary/40"
                   />
                 </div>
@@ -684,7 +694,7 @@ export default function AuctionWorkflow({ onBack }: Props) {
               <WhitelabelPreview
                 eventTitle={eventTitle}
                 brandColor={brandColor}
-                brandName="L'Oréal Indonesia"
+                brandName={brandName}
                 auctionType={auctionType}
                 startTime={`${startDate}T${startTime}:00Z`}
                 endTime={`${endDate}T${endTime}:00Z`}

@@ -22,12 +22,14 @@ import {
   assignmentTemplates,
   completedAuctions,
   type CompletedAuction,
+  type AuctionEvent,
 } from "@/lib/auction-data";
 import AuctionWorkflow from "./AuctionWorkflow";
 import BidMonitor from "./BidMonitor";
 import AutomatedAuctionPipeline from "./AutomatedAuctionPipeline";
 import AuctionAISetup from "./AuctionAISetup";
 import AuctionReview from "./AuctionReview";
+import WhitelabelPreview from "./WhitelabelPreview";
 
 export default function AuctionDashboard() {
   const [showWorkflow, setShowWorkflow] = useState(false);
@@ -35,6 +37,7 @@ export default function AuctionDashboard() {
   const [showPipeline, setShowPipeline] = useState(false);
   const [showAISetup, setShowAISetup] = useState(false);
   const [reviewAuction, setReviewAuction] = useState<CompletedAuction | null>(null);
+  const [previewEvent, setPreviewEvent] = useState<AuctionEvent | null>(null);
 
   if (reviewAuction) {
     return (
@@ -77,9 +80,22 @@ export default function AuctionDashboard() {
   const activeTemplateCount = assignmentTemplates.filter((t) => t.status === "active").length;
 
   const pipelineValue = pipelineEvents.reduce((s, e) => s + e.estimatedValue, 0);
+  const previewBundlePrices = previewEvent
+    ? Object.fromEntries(
+        previewEvent.bundles.map((b) => [
+          b.id,
+          {
+            start: b.recommendedStartBid,
+            reserve: b.recommendedReserveBid,
+            increment: b.bidIncrement,
+            showReserve: b.showReserve,
+          },
+        ])
+      )
+    : {};
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 relative">
       {/* Lily auction orchestrator widget */}
       <div className="bg-gradient-to-br from-white to-primary-50/30 rounded-xl border border-primary/10 overflow-hidden">
         <div className="px-5 py-4 flex items-center justify-between border-b border-primary/10">
@@ -125,10 +141,21 @@ export default function AuctionDashboard() {
                   View pipeline
                 </button>
                 <button
-                  onClick={() => setShowWorkflow(true)}
+                  onClick={() => {
+                    const weeklyDemo = existingAuctionEvents.find((e) =>
+                      e.title.toLowerCase().includes("weekly")
+                    );
+                    if (weeklyDemo) {
+                      setPreviewEvent(weeklyDemo);
+                    } else if (existingAuctionEvents[0]) {
+                      setPreviewEvent(existingAuctionEvents[0]);
+                    } else {
+                      setShowWorkflow(true);
+                    }
+                  }}
                   className="px-4 py-2 border border-border rounded-lg text-xs text-text-primary hover:bg-surface-muted transition-colors"
                 >
-                  Manual setup
+                  Preview event
                 </button>
                 {liveEvents.length > 0 && (
                   <button
@@ -337,7 +364,10 @@ export default function AuctionDashboard() {
                       <Radio size={10} /> Monitor
                     </button>
                   ) : (
-                    <button className="flex items-center gap-1.5 text-[10px] font-medium border border-border text-text-secondary px-3 py-1.5 rounded-lg hover:bg-surface-muted transition-colors">
+                    <button
+                      onClick={() => setPreviewEvent(event)}
+                      className="flex items-center gap-1.5 text-[10px] font-medium border border-border text-text-secondary px-3 py-1.5 rounded-lg hover:bg-surface-muted transition-colors"
+                    >
                       <Eye size={10} /> Preview
                     </button>
                   )}
@@ -554,6 +584,45 @@ export default function AuctionDashboard() {
           </table>
         </div>
       </div>
+
+      {previewEvent && (
+        <div
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[1px] flex items-center justify-center p-4"
+          onClick={() => setPreviewEvent(null)}
+        >
+          <div
+            className="w-[96vw] max-w-[1400px] max-h-[92vh] bg-white rounded-2xl border border-border shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-text-primary">{previewEvent.title}</p>
+                <p className="text-[11px] text-text-muted">Buyer-facing preview</p>
+              </div>
+              <button
+                onClick={() => setPreviewEvent(null)}
+                className="text-xs font-medium text-primary hover:underline"
+              >
+                Close
+              </button>
+            </div>
+            <div className="p-4 overflow-auto max-h-[calc(92vh-64px)]">
+              <WhitelabelPreview
+                eventTitle={previewEvent.title}
+                brandColor={previewEvent.brandColor}
+                brandName={previewEvent.brandName}
+                auctionType={previewEvent.auctionType}
+                startTime={previewEvent.startTime}
+                endTime={previewEvent.endTime}
+                bundles={previewEvent.bundles}
+                bundlePrices={previewBundlePrices}
+                buyerAccess={previewEvent.buyerAccess}
+                invitedCount={previewEvent.invitedBuyers.length}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
