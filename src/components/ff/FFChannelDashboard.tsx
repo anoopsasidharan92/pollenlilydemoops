@@ -32,9 +32,9 @@ import type { FFListing } from "@/lib/ff-data";
 type FFView = "inventory" | "access";
 
 export default function FFChannelDashboard() {
-  const USD_TO_THB = 36;
-  const formatTHB = (value: number) =>
-    `THB ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value * USD_TO_THB)}`;
+  const USD_TO_MYR = 4.7;
+  const formatMYR = (value: number) =>
+    `RM ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value * USD_TO_MYR)}`;
 
   const [activeView, setActiveView] = useState<FFView>("inventory");
   const [showAllocationModal, setShowAllocationModal] = useState(false);
@@ -98,7 +98,7 @@ export default function FFChannelDashboard() {
           { label: "Allocated SKUs", value: ffListings.length, color: "text-primary", bg: "bg-primary-lighter", icon: Package },
           { label: "Units Allocated", value: totalAllocated.toLocaleString(), color: "text-accent-blue", bg: "bg-blue-50", icon: Hash },
           { label: "Units Sold", value: totalSold.toLocaleString(), color: "text-accent-green", bg: "bg-green-50", icon: ShoppingBag },
-          { label: "Revenue Recovered", value: `THB ${((totalRevenue * USD_TO_THB) / 1000).toFixed(1)}K`, color: "text-accent-green", bg: "bg-green-50", icon: DollarSign },
+          { label: "Revenue Recovered", value: `RM ${((totalRevenue * USD_TO_MYR) / 1000).toFixed(1)}K`, color: "text-accent-green", bg: "bg-green-50", icon: DollarSign },
           { label: "Live / Sold Out", value: `${liveCount} / ${soldOutCount}`, color: "text-accent-orange", bg: "bg-orange-50", icon: Tag },
         ].map((stat) => (
           <div key={stat.label} className="bg-white rounded-xl border border-border p-3">
@@ -116,7 +116,7 @@ export default function FFChannelDashboard() {
           listings={ffListings}
           selectedSKUs={selectedSKUs}
           toggleSKU={toggleSKU}
-          formatTHB={formatTHB}
+          formatMYR={formatMYR}
         />
       )}
 
@@ -133,12 +133,12 @@ function InventoryView({
   listings,
   selectedSKUs,
   toggleSKU,
-  formatTHB,
+  formatMYR,
 }: {
   listings: FFListing[];
   selectedSKUs: string[];
   toggleSKU: (id: string) => void;
-  formatTHB: (value: number) => string;
+  formatMYR: (value: number) => string;
 }) {
   return (
     <div className="bg-white rounded-xl border border-border overflow-hidden">
@@ -209,11 +209,11 @@ function InventoryView({
                       </div>
                     </div>
                   </td>
-                  <td className="px-3 py-2 text-xs text-text-muted line-through">{formatTHB(item.retailPrice)}</td>
+                  <td className="px-3 py-2 text-xs text-text-muted line-through">{formatMYR(item.retailPrice)}</td>
                   <td className="px-3 py-2">
                     <span className="text-xs font-medium text-accent-green">-{item.ffDiscount}%</span>
                   </td>
-                  <td className="px-3 py-2 text-xs font-bold text-primary">{formatTHB(item.ffPrice)}</td>
+                  <td className="px-3 py-2 text-xs font-bold text-primary">{formatMYR(item.ffPrice)}</td>
                   <td className="px-3 py-2 text-xs font-medium">{item.maxPerBuyer}</td>
                   <td className="px-3 py-2">
                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
@@ -245,9 +245,9 @@ function InventoryView({
 }
 
 function AccessControlsView() {
-  const USD_TO_THB = 36;
-  const formatTHB = (value: number) =>
-    `THB ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value * USD_TO_THB)}`;
+  const USD_TO_MYR = 4.7;
+  const formatMYR = (value: number) =>
+    `RM ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value * USD_TO_MYR)}`;
 
   const config = ffAccessConfig;
   const [ssoEnabled, setSsoEnabled] = useState(true);
@@ -409,7 +409,7 @@ function AccessControlsView() {
                   <DollarSign size={14} className="text-accent-green" />
                   <p className="text-xs font-medium">Per-Buyer Spending Cap</p>
                 </div>
-                <span className="text-sm font-bold text-accent-green">{formatTHB(spendingCap)}</span>
+                <span className="text-sm font-bold text-accent-green">{formatMYR(spendingCap)}</span>
               </div>
               <p className="text-[10px] text-text-muted ml-6">Maximum total spend per employee across the event</p>
               <div className="mt-2 ml-6">
@@ -423,9 +423,9 @@ function AccessControlsView() {
                   className="w-full accent-[#10B981] h-2 cursor-pointer"
                 />
                 <div className="flex justify-between text-[9px] text-text-muted mt-1">
-                  <span>THB 1,800</span>
-                  <span>THB 9,000</span>
-                  <span>THB 18,000</span>
+                  <span>RM 235</span>
+                  <span>RM 1,175</span>
+                  <span>RM 2,350</span>
                 </div>
               </div>
             </div>
@@ -578,9 +578,9 @@ function AccessControlsView() {
 }
 
 function AllocationModal({ onClose }: { onClose: () => void }) {
-  const USD_TO_THB = 36;
-  const formatTHB = (value: number) =>
-    `THB ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value * USD_TO_THB)}`;
+  const USD_TO_MYR = 4.7;
+  const formatMYR = (value: number) =>
+    `RM ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value * USD_TO_MYR)}`;
 
   const [step, setStep] = useState(1);
   const [selectedProducts, setSelectedProducts] = useState<string[]>(["LOR-SHP-001", "GAR-MSK-003", "MAY-FND-004"]);
@@ -666,7 +666,7 @@ function AllocationModal({ onClose }: { onClose: () => void }) {
                 <p className="text-[10px] text-text-muted mt-1">Off retail price. Recommended: 50-60% for F&F events.</p>
               </div>
               <div className="p-3 bg-accent-green/5 border border-accent-green/20 rounded-lg">
-                <p className="text-xs text-accent-green font-medium">Preview: A {formatTHB(10)} retail item {"->"} {formatTHB(10 * (1 - Number(discount) / 100))} F&F price</p>
+                <p className="text-xs text-accent-green font-medium">Preview: A {formatMYR(10)} retail item {"->"} {formatMYR(10 * (1 - Number(discount) / 100))} F&F price</p>
               </div>
               <div className="flex gap-2">
                 <button

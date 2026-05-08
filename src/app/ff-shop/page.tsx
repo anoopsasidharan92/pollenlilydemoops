@@ -31,9 +31,9 @@ interface CartItem {
 }
 
 export default function FFShop() {
-  const USD_TO_THB = 36;
-  const formatTHB = (value: number) =>
-    `THB ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value * USD_TO_THB)}`;
+  const USD_TO_MYR = 4.7;
+  const formatMYR = (value: number) =>
+    `RM ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value * USD_TO_MYR)}`;
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
@@ -128,7 +128,7 @@ export default function FFShop() {
             </div>
             <div className="flex items-center gap-2 text-xs text-gray-600">
               <User size={14} />
-              <span className="font-medium">Duan Prasert</span>
+              <span className="font-medium">Aiman Razak</span>
             </div>
             <button
               onClick={() => setShowCart(true)}
@@ -159,7 +159,7 @@ export default function FFShop() {
           </p>
           <div className="flex items-center gap-4 mt-4">
             <div className="bg-white/10 backdrop-blur rounded-lg px-4 py-2">
-              <p className="text-lg font-bold">{formatTHB(remainingBudget)}</p>
+              <p className="text-lg font-bold">{formatMYR(remainingBudget)}</p>
               <p className="text-[10px] text-purple-200">Budget Remaining</p>
             </div>
             <div className="bg-white/10 backdrop-blur rounded-lg px-4 py-2">
@@ -238,8 +238,8 @@ export default function FFShop() {
                   <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wide">{item.brand}</p>
                   <p className="text-xs font-medium text-gray-900 line-clamp-2 leading-relaxed">{item.product}</p>
                   <div className="flex items-center gap-2">
-                    <span className="text-base font-bold text-[#6B3FA0]">{formatTHB(item.ffPrice)}</span>
-                    <span className="text-xs text-gray-400 line-through">{formatTHB(item.retailPrice)}</span>
+                    <span className="text-base font-bold text-[#6B3FA0]">{formatMYR(item.ffPrice)}</span>
+                    <span className="text-xs text-gray-400 line-through">{formatMYR(item.retailPrice)}</span>
                   </div>
                   <div className="flex items-center justify-between text-[10px] text-gray-400">
                     <span>Max {item.maxPerBuyer} per person</span>
@@ -325,7 +325,7 @@ export default function FFShop() {
                     <div className="flex-1 min-w-0">
                       <p className="text-[10px] text-gray-500 font-medium">{item.brand}</p>
                       <p className="text-xs font-medium text-gray-900 truncate">{item.product}</p>
-                      <p className="text-sm font-bold text-[#6B3FA0] mt-1">{formatTHB(item.price * item.quantity)}</p>
+                      <p className="text-sm font-bold text-[#6B3FA0] mt-1">{formatMYR(item.price * item.quantity)}</p>
                     </div>
                     <div className="flex flex-col items-center gap-1">
                       <button
@@ -352,18 +352,18 @@ export default function FFShop() {
               <div className="p-5 border-t border-gray-200 space-y-3">
                 <div className="flex justify-between text-xs text-gray-500">
                   <span>Subtotal</span>
-                  <span className="font-medium text-gray-900">{formatTHB(cartTotal)}</span>
+                  <span className="font-medium text-gray-900">{formatMYR(cartTotal)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-gray-500">Spending Cap Remaining</span>
                   <span className={`font-medium ${remainingBudget < 0 ? "text-red-500" : "text-green-600"}`}>
-                    {formatTHB(remainingBudget)}
+                    {formatMYR(remainingBudget)}
                   </span>
                 </div>
                 {remainingBudget < 0 && (
                   <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg p-2">
                     <Lock size={12} className="text-red-500" />
-                    <p className="text-[10px] text-red-600">You have exceeded your spending cap of THB 7,200.</p>
+                    <p className="text-[10px] text-red-600">You have exceeded your spending cap of RM 940.</p>
                   </div>
                 )}
                 <button
@@ -371,7 +371,7 @@ export default function FFShop() {
                   disabled={remainingBudget < 0 || cart.length === 0}
                   className="w-full bg-[#6B3FA0] text-white py-3 rounded-lg text-sm font-medium hover:bg-[#4A2B73] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Checkout · {formatTHB(cartTotal)}
+                  Checkout · {formatMYR(cartTotal)}
                 </button>
               </div>
             )}
@@ -392,7 +392,7 @@ export default function FFShop() {
                   <div className="bg-gray-50 rounded-lg p-3 space-y-2">
                     <div className="flex justify-between text-xs">
                       <span className="text-gray-500">Employee</span>
-                      <span className="font-medium">Duan Prasert (duan.prasert@loreal.com)</span>
+                      <span className="font-medium">Aiman Razak (aiman.razak@loreal.com)</span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-gray-500">Department</span>
@@ -404,7 +404,7 @@ export default function FFShop() {
                     </div>
                     <div className="flex justify-between text-xs border-t border-gray-200 pt-2">
                       <span className="text-gray-500">Total</span>
-                      <span className="font-bold text-[#6B3FA0]">{formatTHB(cartTotal)}</span>
+                      <span className="font-bold text-[#6B3FA0]">{formatMYR(cartTotal)}</span>
                     </div>
                   </div>
 
@@ -509,8 +509,8 @@ export default function FFShop() {
                 </div>
                 <h3 className="text-lg font-bold text-gray-900">Order Placed!</h3>
                 <p className="text-sm text-gray-500">
-                  Your order will be shipped to the L&apos;Oréal Thailand office within 2-3 business days.
-                  A confirmation has been sent to duan.prasert@loreal.com.
+                  Your order will be shipped to the L&apos;Oréal Malaysia office within 2-3 business days.
+                  A confirmation has been sent to aiman.razak@loreal.com.
                 </p>
                 <p className="text-xs text-gray-400">Order ID: FFO-482</p>
               </div>
